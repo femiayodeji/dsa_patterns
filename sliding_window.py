@@ -39,3 +39,24 @@ class LongestSubstringWithNoRepetition:
                 left += 1
             seen.add(str[right])
         return result
+    
+class MininumWindowSubstring:
+    def brute(s = "ADOBECODEBANC",  t = "ABC"):
+        result = ""
+        for i in range(len(s)):
+            for j in range(i, len(s)):
+                sub = s[i:j+1]
+                t_count = {}
+                for c in t:
+                    t_count[c] = t_count.get(c, 0) + 1
+                for c in sub:
+                    if c in t_count:
+                        t_count[c] -= 1
+                contained = list(filter(lambda x: t_count[x] > 0, t_count))
+                if len(contained) == 0:
+                    if len(result) == 0:
+                        result = sub
+                    elif len(sub) < len(result):
+                        result = sub
+        return result
+
