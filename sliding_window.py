@@ -16,3 +16,26 @@ class BestBuy:
             else:
                 max_profit = max(prices[right]-min_price, max_profit)
         return max_profit
+
+class LongestSubstringWithNoRepetition:
+    def brute(str = "abcabcbb"):
+        result = ""
+        for i in range(len(str)):
+            for j in range(i, len(str)):
+                sub = str[i:j+1]
+                if len(set(sub)) == len(sub) and len(sub) > len(result):
+                    result = sub
+        return result
+        
+    def optimal(str = "pwwkew"):
+        result = ""
+        seen = set()
+        left = 0
+        for right in range(len(str)):
+            while str[right] in seen:
+                if len(result) < len(str[left:right]):
+                    result = str[left:right]
+                seen.remove(str[left])
+                left += 1
+            seen.add(str[right])
+        return result
