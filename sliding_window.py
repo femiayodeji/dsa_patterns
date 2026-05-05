@@ -42,21 +42,52 @@ class LongestSubstringWithNoRepetition:
     
 class MininumWindowSubstring:
     def brute(s = "ADOBECODEBANC",  t = "ABC"):
-        result = ""
+        min_len = float('inf')
+        start = end = 0
         for i in range(len(s)):
             for j in range(i, len(s)):
                 sub = s[i:j+1]
-                t_count = {}
+                needed_characters_map = {}
                 for c in t:
-                    t_count[c] = t_count.get(c, 0) + 1
+                    needed_characters_map[c] = needed_characters_map.get(c, 0) + 1
                 for c in sub:
-                    if c in t_count:
-                        t_count[c] -= 1
-                contained = list(filter(lambda x: t_count[x] > 0, t_count))
+                    if c in needed_characters_map:
+                        needed_characters_map[c] -= 1
+                contained = list(filter(lambda x: needed_characters_map[x] > 0, needed_characters_map))
                 if len(contained) == 0:
-                    if len(result) == 0:
-                        result = sub
-                    elif len(sub) < len(result):
-                        result = sub
-        return result
+                    if j - i + 1 < min_len:
+                        min_len = j - i +1
+                        start = i
+                        end = j
+        return s[start:end+1] if min_len != float('inf') else ""
 
+    def optimal(s = "ADOBECODEBANC",  t = "ABC"):
+        needed_characters_map = {}
+        for c in t:
+            needed_characters_map[c] = needed_characters_map.get(c, 0) + 1
+        required_characters_n = len(needed_characters_map.keys())
+        substring_characters_map = {}
+        formed = 0
+
+        min_len = float('inf')
+        start = end = 0
+        left = 0
+        
+        for right in range(len(s)):
+            char = s[right]
+            substring_characters_map[char] = substring_characters_map.get(char, 0) + 1
+            if char in needed_characters_map and needed_characters_map[char] == substring_characters_map[char]:
+                formed += 1
+
+            while formed == required_characters_n:
+                if right - left + 1 < min_len:
+                    start = left
+                    end = right
+                    min_len = right - left + 1
+                    
+                left_char = s[left]
+                substring_characters_map[left_char] -= 1
+                if left_char in needed_characters_map and substring_characters_map[left_char] < needed_characters_map[left_char]:
+                    formed -= 1
+                left += 1
+        return s[start:end+1] if min_len != float('inf') else ""
