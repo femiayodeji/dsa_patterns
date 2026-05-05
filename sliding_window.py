@@ -91,3 +91,57 @@ class MininumWindowSubstring:
                     formed -= 1
                 left += 1
         return s[start:end+1] if min_len != float('inf') else ""
+
+class SlidingWindowMaximum:
+    def brute(nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3):
+        result = []
+        start = 0
+        for i in range(k-1, len(nums)):
+            result.append(max(nums[start:i+1]))
+            start += 1
+        return result
+
+    def brute_clean(nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3):
+        result = []
+        start = 0
+        for i in range(len(nums)-k+1):
+            m = float('-inf')
+            for j in range(i, i+k):
+                m = max(m, nums[j])
+            result.append(m)
+        return result
+
+    def optimal(nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3):
+        result = []
+        deque = []
+        for right in range(len(nums)):
+            num = nums[right]
+            while len(deque) > 0 and deque[-1] < num:
+                deque.pop()
+            deque.append(right)
+            
+            if deque[0] < right - k + 1:
+                deque.pop(0)
+                
+            if right + 1 >= k:
+                result.append(nums[deque[0]])
+                
+        return result
+
+    from collections import deque
+    def solve(nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3):
+        result = []
+        q = deque() 
+        
+        for right in range(len(nums)):
+            while q and nums[q[-1]] < nums[right]:
+                q.pop()
+            q.append(right)
+            
+            if q[0] < right - k + 1:
+                q.popleft()
+                
+            if right + 1 >= k:
+                result.append(nums[q[0]])
+
+        return result
