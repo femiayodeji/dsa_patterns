@@ -128,8 +128,8 @@ class SlidingWindowMaximum:
 
         return result
 
-    from collections import deque
     def optimal(nums = [1, 3, -1, -3, 5, 3, 6, 7],  k = 3):
+        from collections import deque
         result = []
         q = deque() 
         
@@ -145,3 +145,24 @@ class SlidingWindowMaximum:
                 result.append(nums[q[0]])
 
         return result
+
+class LongestRepeatingCharacterReplacememt:
+    def brute(s = "AABABBA",  k = 1):
+        max_len = 0        
+        for i in range(len(s)):
+            count = {}
+            max_freq = 0
+            for j in range(i, len(s)):
+                sub = s[i:j+1]
+                char = s[j]
+                count[char] = count.get(char, 0) + 1
+                
+                max_freq = max(count[char], max_freq)
+                
+                window_size = j - i + 1
+                required_replacement = window_size - max_freq
+                
+                if required_replacement <= k:
+                    max_len = max(window_size, max_len)
+        return max_len
+
