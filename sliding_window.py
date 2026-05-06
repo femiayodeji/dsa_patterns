@@ -153,7 +153,6 @@ class LongestRepeatingCharacterReplacememt:
             count = {}
             max_freq = 0
             for j in range(i, len(s)):
-                sub = s[i:j+1]
                 char = s[j]
                 count[char] = count.get(char, 0) + 1
                 
@@ -165,4 +164,31 @@ class LongestRepeatingCharacterReplacememt:
                 if required_replacement <= k:
                     max_len = max(window_size, max_len)
         return max_len
+
+    def optimal(s = "AABABBA",  k = 1):
+        max_len = 0
+        count = {}
+        max_freq = 0
+        left = 0
+        
+        for right in range(len(s)):
+            char = s[right]
+            count[char] = count.get(char, 0) + 1
+            
+            max_freq = max(count[char], max_freq)
+            
+            window_size = right - left + 1
+            required_replacement = window_size - max_freq
+            
+            if required_replacement > k:
+                left_char = s[left]
+                count[left_char] -= 1
+                left += 1
+            
+            window_size = right - left + 1
+            max_len = max(window_size, max_len)
+
+        return max_len
+        
+
 
