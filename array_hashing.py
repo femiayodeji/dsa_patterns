@@ -39,3 +39,23 @@ class TwoSum:
                 return [seen[diff], i]
             seen[nums[i]] = i 
         return []
+
+class ContainDuplicate:
+    def brute(nums = [1, 2, 3, 1]):
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                if nums[i] == nums[j]:
+                    return True
+        return False
+
+    def optimal(nums = [1, 2, 3, 1]):
+        seen = set()
+        for i in range(len(nums)):
+            if nums[i] in seen:
+                return True
+            seen.add(nums[i])
+        return False
+
+    def optimal_raw(nums = [1, 2, 3, 1]):
+        return len(set(nums)) != len(nums)
+
