@@ -97,3 +97,26 @@ class EatPileInTime:
                 right = k - 1
 
         return result
+
+class RotatedSortedArray:
+    def brute(nums = [4, 5, 6, 7, 0, 1, 2]):
+        pivot = nums[0]
+        for num in nums:
+            if num < pivot:
+                pivot = num
+        return pivot
+
+    def solve(nums = [4, 5, 6, 7, 0, 1, 2]):
+        left = 0
+        right = len(nums) - 1
+        
+        while left < right:
+            mid = (left + right)//2
+            
+            if nums[mid] > nums[right]:
+                left = mid + 1
+            else:
+                right = mid
+                
+        return nums[left]
+            
