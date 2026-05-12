@@ -42,7 +42,6 @@ class MatrixSearch:
         [23, 30, 34, 60]
     ],
     target = 3):
-        import math
         
         rows = len(matrix)
         cols = len(matrix[0])
@@ -52,7 +51,7 @@ class MatrixSearch:
         
         while (left <= right):
             mid = (left + right)//2
-            row = math.floor(mid/cols)
+            row = mid//cols
             col = mid % cols
             value = matrix[row][col]
             
@@ -65,3 +64,36 @@ class MatrixSearch:
             
         
         return False
+
+class EatPileInTime:
+    def brute(piles = [3, 6, 7, 11],  h = 8):
+        k = 1
+        
+        while(True):
+            hour = 0
+            for pile in piles:
+                hour += pile/k
+            if hour <= h:
+                return k
+            k += 1
+
+    def optimal(piles = [3, 6, 7, 11],  h = 8):
+        from functools import reduce
+        
+        left = 1
+        right = max(piles)
+        result = right
+        while(left <= right):
+            k = (left+right)//2
+            
+            hour = reduce(lambda x, y: x + y, piles) / k
+            
+            if hour <= h:
+                result = k
+                right = k - 1
+            elif hour > h:
+                left = k + 1
+            else:
+                right = k - 1
+
+        return result
