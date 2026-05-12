@@ -89,3 +89,55 @@ class GroupAnagram:
                 groups[sorted_word].append(word)
             
         return list(groups.values())
+
+class TopKFrequent:
+    def brute(nums = [1, 1, 1, 2, 2, 3],  k = 2):
+        result = []
+        counts = {}
+        for num in nums:
+            counts[num] = counts.get(num, 0) + 1
+        
+        counts = dict(sorted(counts.items(), key=lambda x: x[1], reverse=True))
+        
+        for count in counts:
+            result.append(count)
+            k -= 1
+            if k <=0:
+                break
+            
+        return result
+
+    def optimal(nums = [1,1,1,2,2,3],  k = 2):
+        result = []
+        counts = {}
+        for num in nums:
+            counts[num] = counts.get(num, 0) + 1
+        
+        bucket = [[] for _ in range(len(nums)+1)]
+
+        for num, freq in counts.items():
+            bucket[freq].append(num) 
+        
+        for i in range(len(bucket)-1, -1, -1):
+            for num in bucket[i]:
+                result.append(num)
+                if len(result) == k:
+                    return result
+        return []
+
+
+    def optimal_raw(nums = [1,1,1,2,2,3],  k = 2):
+        import heapq
+        counts = {}
+        for num in nums:
+            counts[num] = counts.get(num, 0) + 1
+        
+        min_heap = []
+        for num, freq in counts.items():
+            heapq.heappush(min_heap, (freq, num))
+            
+            if len(min_heap) > k:
+                heapq.heappop(min_heap)
+        return [item[1] for item in min_heap]
+
+    
