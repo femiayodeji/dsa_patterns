@@ -59,3 +59,33 @@ class ContainDuplicate:
     def optimal_raw(nums = [1, 2, 3, 1]):
         return len(set(nums)) != len(nums)
 
+class GroupAnagram:
+    def brute(words = ["eat", "tea", "tan", "ate", "nat", "bat"]):
+        result = []
+        used = [False] * len(words)
+        
+        for i in range(len(words)):
+            word = words[i]
+            x = "".join(sorted(list(word)))
+            if used[i]:
+                continue
+            
+            group = [word]
+            for j in range(i+1, len(words)):
+                y = "".join(sorted(list(words[j])))
+                if not used[j] and (x == y):
+                    group.append(words[j])
+                    used[j] = True
+            result.append(group)
+        return result
+
+    def optimal(words = ["eat", "tea", "tan", "ate", "nat", "bat"]):
+        groups = {}
+        for word in words:
+            sorted_word = "".join(sorted(list(word)))
+            if sorted_word not in groups:
+                groups[sorted_word] = [word]
+            else:
+                groups[sorted_word].append(word)
+            
+        return list(groups.values())
