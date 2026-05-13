@@ -11,7 +11,7 @@ class ListNode:
             node = node.next
         return str(result)
 
-    def reverse_list_brute(self, node = None):
+    def reverse_brute(self, node = None):
         if node is None:
             node = self
 
@@ -28,7 +28,7 @@ class ListNode:
             cur = cur.next
         return dummy.next
 
-    def reverse_list_optimal(self, node = None):
+    def reverse_optimal(self, node = None):
         if node is None:
             node = self
 
@@ -42,6 +42,45 @@ class ListNode:
             cur = save
         return prev
 
+    def merge_brute(self, node2):
+        if node2 is None:
+            return self
+        node1 = self
+
+        values = []
+        while node1:
+            values.append(node1.val)
+            node1 = node1.next
+        while node2:
+            values.append(node2.val)
+            node2 = node2.next
+        values.sort()
+        
+        dummy = ListNode(None)
+        cur = dummy
+        for num in values:
+            cur.next = ListNode(num)
+            cur = cur.next
+        return dummy.next
+
+    def merge_optimal(self, node2):
+        if node2 is None:
+            return self
+        node1 = self
+
+        dummy = ListNode(None)
+        cur = dummy
+        while node1 and node2:
+            if node1.val <= node2.val:
+                cur.next = node1
+                node1 = node1.next
+            else:
+                cur.next = node2
+                node2 = node2.next
+            cur = cur.next
+        cur.next = node1 or node2
+        return dummy.next
+
         
 if __name__ == "__main__":
     # Create individual nodes
@@ -51,11 +90,20 @@ if __name__ == "__main__":
     node4 = ListNode(4)
     node5 = ListNode(5)
 
+    head2 = ListNode(1)
+    node23 = ListNode(3)
+    node24 = ListNode(4)
+    node27 = ListNode(7)
+
     # Link them together
     head.next = node2
     node2.next = node3
     node3.next = node4
     node4.next = node5
 
-    print(head.reverse_list_brute())
-    print(head.reverse_list_optimal())
+    head2.next = node23
+    node23.next = node24
+    node24.next = node27
+
+    print(head.merge_brute(head2))
+    print(head.merge_optimal(head2))
