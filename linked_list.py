@@ -81,7 +81,45 @@ class ListNode:
         cur.next = node1 or node2
         return dummy.next
 
+    def remove_at_end_brute(self, node, n):
+        if node is None:
+            node = self
+        length = 0
+        cur = node
+        while cur:
+            length += 1
+            cur = cur.next
         
+        if length == n: 
+            return node.next
+        
+        cur = node
+        for i in range(1, length - n):
+            cur = cur.next
+        cur.next = cur.next.next
+        return node
+
+    def remove_at_end_optimal(self, node, n):
+        if node is None:
+            node = self
+
+        slow = node
+        fast = node
+        
+        for i in range(n+1):
+            fast = fast.next
+            
+        while slow and fast:
+            slow = slow.next
+            fast = fast.next
+        
+        slow.next = slow.next.next
+        return node
+
+
+
+
+
 if __name__ == "__main__":
     # Create individual nodes
     head = ListNode(1)
