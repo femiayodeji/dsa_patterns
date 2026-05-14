@@ -152,6 +152,57 @@ class ListNode:
 
         return False
 
+    def merge_nodes_brute(self, nodes):
+        values = []
+        for node in nodes:
+            cur = node
+            while cur:
+                values.append(cur.val)
+                cur = cur.next
+        values.sort()
+        
+        dummy = ListNode(None)
+        cur = dummy
+        for num in values:
+            cur.next = ListNode(num)
+            cur = cur.next
+
+        return dummy.next
+
+
+    def merge_nodes_optimal(self, nodes):
+        def merge_two(node1, node2):
+            dummy = ListNode(None)
+            cur = dummy
+            while node1 and node2:
+                if node1.val <= node2.val:
+                    cur.next = ListNode(node1.val)
+                    node1 = node1.next
+                else:
+                    cur.next = ListNode(node2.val)
+                    node2 = node2.next
+                cur = cur.next
+                
+            remaining = node1 or node2
+            
+            while remaining:
+                cur.next = ListNode(remaining.val)
+                remaining = remaining.next
+                cur = cur.next
+            
+            return dummy.next
+
+        if not nodes:
+            return None
+            
+        while len(nodes) > 1:
+            merged = []
+            for i in range(0, len(nodes), 2):
+                l1 = nodes[i]
+                l2 = nodes[i + 1] if (i + 1) < len(nodes) else None
+                merged.append(merge_two(l1, l2))
+            nodes = merged
+        return nodes[0]
 
 
 if __name__ == "__main__":
@@ -179,4 +230,5 @@ if __name__ == "__main__":
     # node27.next = node23
 
 
-    print(head.has_cycle_brute(head2))
+    print(head.merge_nodes_brute(nodes = [head, head2, head2, head, head2]))
+    print(head.merge_nodes_optimal(nodes = [head, head2, head2, head, head2]))
