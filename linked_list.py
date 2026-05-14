@@ -6,7 +6,12 @@ class ListNode:
     def __str__(self):
         node = self
         result = []
+        seen = set()
         while node:
+            if id(node) in seen:
+                result.append("~")
+                break
+            seen.add(id(node))
             result.append(node.val)
             node = node.next
         return str(result)
