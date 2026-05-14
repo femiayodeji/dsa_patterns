@@ -109,14 +109,43 @@ class ListNode:
         for i in range(n+1):
             fast = fast.next
             
-        while slow and fast:
+        while fast:
             slow = slow.next
             fast = fast.next
         
         slow.next = slow.next.next
         return node
 
+    def has_cycle_brute(self, node = None):
+        if node is None:
+            node = self
+            
+        seen = set()
+        
+        cur = node
+        while cur:
+            if cur in seen:
+                return True
+            seen.add(cur)
+            cur = cur.next
+        
+        return False
 
+    def has_cycle_optimal(node = None):
+        if node is None:
+            node = self
+
+        slow = node
+        fast = node
+        
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast:
+                return True
+
+        return False
 
 
 
@@ -142,6 +171,7 @@ if __name__ == "__main__":
     head2.next = node23
     node23.next = node24
     node24.next = node27
+    # node27.next = node23
 
-    print(head.merge_brute(head2))
-    print(head.merge_optimal(head2))
+
+    print(head.has_cycle_brute(head2))
